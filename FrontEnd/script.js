@@ -1,7 +1,7 @@
 const API_BASE_URL = "http://localhost:5678/api";
 let allWorks = [];
 
-export async function getWorks() {
+async function getWorks() {
     try {
         const response = await fetch(`${API_BASE_URL}/works`);
         const data = await response.json();
@@ -34,7 +34,7 @@ async function displayWorks(works) {
     console.log("Works displayed successfully");
 }
 
-export async function getCategories() {
+async function getCategories() {
     try {
         const response = await fetch(`${API_BASE_URL}/categories`);
         const data = await response.json();
@@ -80,5 +80,4 @@ function displayCategories(categories) {
 
 // Appeler les fonctions pour récupérer et afficher les données
 getWorks();
-
 getCategories();
