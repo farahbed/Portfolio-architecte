@@ -78,11 +78,69 @@ function displayCategories(categories) {
 
   console.log("Categories displayed successfully");
 }
-
-
-
 // Appeler les fonctions pour récupérer et afficher les données
 getWorks();
 getCategories();
 
+//Admin mode
 
+// Vérifier que le token est valide
+const token = localStorage.getItem("token");
+console.log("Token from localStorage:", token);
+
+// Vérifier si l'utilisateur est administrateur
+const adminKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMDYzNzUxMiwiZXhwIjoxNzIwNzIzOTEyfQ.wG7y2tAZ42QKsrUTs4QRIJuQ8g6yQPGntwQ6eAfbOgI"
+const modeAdmin = token === adminKey;
+console.log("Mode admin:", modeAdmin);
+
+const adminBanner = document.getElementById('adminBanner');
+console.log("adminBanner element:", adminBanner);
+
+const header = document.querySelector('header');
+console.log("Header element:", header);
+
+
+// Afficher le bandeau "Mode édition" si l'utilisateur est administrateur
+if (modeAdmin) {
+    header.classList.add('admin-mode');
+    adminBanner.style.display = 'block'; // show admin banner
+} else {
+    header.classList.remove('admin-mode');
+    adminBanner.style.display = 'none'; // hide admin banner
+}
+
+
+// SHOW MODAL / CLOSE MODAL POPUP
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM fully loaded and parsed');
+
+  const textModifier = document.querySelector('.popup .show-popup');
+  const modal = document.getElementById('modal');
+  const customModal = document.querySelector('.custom-modal');
+
+  console.log('Elements:', {
+      textModifier,
+      modal,
+      customModal
+  });
+
+  // cliquer sur "Modifier" ouvre le modal
+  function openModal(event) {
+      event.preventDefault();
+      console.log('Opening modal...');
+
+      // cliquer sur le bouton "Modifier" ouvre le modal
+      modal.style.display = 'flex';
+    }
+    textModifier.addEventListener('click', openModal);
+
+ 
+// on quite le modal quand on clique en dehors
+  modal.addEventListener('click', function(event) {
+      if (event.target === modal) {
+          console.log('Clicked outside modal, close the modal');
+          modal.style.display = 'none'; // Masque le modal et le fond semi-transparent
+      }
+  });
+});

@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+      rel="stylesheet"/>
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
-    <header>
+    <header class="admin-mode">
+        <div id="adminBanner">
+           <i class="fa-regular fa-pen-to-square"></i>
+            <p>Mode édition</p>
+        </div>
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
         <ul>
@@ -25,6 +29,12 @@
         </ul>
       </nav>
     </header>
+    <!--LOADER-->
+        <div id="modal">
+          <div class="custom-modal"></div>
+          <span class="close">&times;</span>
+        </div>
+
     <main>
       <section id="introduction">
         <figure>
@@ -50,7 +60,11 @@
         </article>
       </section>
       <section id="portfolio">
+        <div class="popup">
         <h2>Mes Projets</h2>
+        <i class=" fa-regular fa-pen-to-square"></i>
+        <a ="#" class="show-popup">Modifier</a>
+        </div>
         <div class="filters">
           <button class="category-btn">Tous</button>
           <!-- API : Boucler sur les données et les afficher -->

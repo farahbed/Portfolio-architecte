@@ -32,7 +32,11 @@ function login() {
     })
     .then(function (data) {
       console.log("data received:", data);
+
+      // Stocker le token dans le localStorage
       localStorage.setItem("token", data.token);
+      console.log("Token stored in localStorage:", data.token);
+
       window.location.href = "index.html";
     })
      .catch(function (error) {

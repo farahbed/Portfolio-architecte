@@ -53,6 +53,38 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
+#adminBanner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+	left: 0;
+    z-index: 1000;
+    display: none; /* Masqué par défaut */
+}
+
+.admin-mode #adminBanner {
+    display: block; /* Affiché si en mode admin */
+}
+
+#adminBanner i {
+   position: absolute;
+   left: 45%;
+   top: 50%;
+   transform: translateY(-50%);
+	color: #ffffff;
+}
+
+
+
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -125,12 +157,49 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+.popup {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	
+}
+.popup h2 {
+	margin-right: 10px; ;
+}
+.show-popup {
+	gap: 10px;
+	font-size: 14px;
+	cursor: pointer;
+}
+	
+#modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%; 
+	height: 100%; 
+	background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 10;
+	display: none; /* Masque par défaut */
+	
+}
+
+.custom-modal {
+	width: 630px; 
+	height: 688px; 
+	background-color: #ffffff; 
+}
+
+	
 .filters {
 	display: flex;
 	justify-content: center;
 	
 	
-}
+}	
 .filters button {
 	border: none;
 	font-size: 1.2em;
@@ -140,12 +209,12 @@ li:hover {
 	background-color: white;
 	width: 13%;
 	height: 48px;
-}
+}	
 
 button:hover {
 	color: white;
 	background-color: #1D6154;
-}
+}	
 
 .gallery {
 	width: 100%;
@@ -153,12 +222,15 @@ button:hover {
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
-}
+}	
 
 .gallery img {
 	width: 100%;
 
-}
+}	
+
+
+
 #contact {
 	width: 50%;
 margin: auto;
