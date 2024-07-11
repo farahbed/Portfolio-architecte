@@ -192,6 +192,16 @@ li:hover {
 	height: 688px; 
 	background-color: #ffffff; 
 }
+.close {
+    color: #000000;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+	position: absolute;
+	top: 40px;
+	left: 68%;
+	cursor: pointer;
+  }
 
 	
 .filters {

@@ -82,7 +82,7 @@ function displayCategories(categories) {
 getWorks();
 getCategories();
 
-//Admin mode
+//-------------------------------------------------Admin mode
 
 // Vérifier que le token est valide
 const token = localStorage.getItem("token");
@@ -110,7 +110,7 @@ if (modeAdmin) {
 }
 
 
-// SHOW MODAL / CLOSE MODAL POPUP
+// ------------------------------------------SHOW MODAL / CLOSE MODAL POPUP
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM fully loaded and parsed');
@@ -118,24 +118,32 @@ document.addEventListener('DOMContentLoaded', function() {
   const textModifier = document.querySelector('.popup .show-popup');
   const modal = document.getElementById('modal');
   const customModal = document.querySelector('.custom-modal');
+  const close = document.querySelector('.close');
 
   console.log('Elements:', {
       textModifier,
       modal,
-      customModal
+      customModal,
+      close
   });
 
   // cliquer sur "Modifier" ouvre le modal
   function openModal(event) {
       event.preventDefault();
-      console.log('Opening modal...');
+      console.log('Opening modal');
 
       // cliquer sur le bouton "Modifier" ouvre le modal
       modal.style.display = 'flex';
     }
     textModifier.addEventListener('click', openModal);
 
- 
+    // cliquer sur le bouton "X" ferme le modal
+ close.addEventListener('click', function() {
+       modal.style.display = 'none';
+       console.log('Closing modal...');
+     
+   
+ })
 // on quite le modal quand on clique en dehors
   modal.addEventListener('click', function(event) {
       if (event.target === modal) {
