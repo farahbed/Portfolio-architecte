@@ -39,13 +39,7 @@ function displayWorks(works) {
       gallery.appendChild(figure);
       figure.appendChild(figcaption);
 
-      deleteIcon.classList.add("fa", "fa-trash", "delete-icon");
-      deleteIcon.addEventListener("click", () => {
-        console.log("Suppression de l'œuvre:", work.id);
-        // Implémentez ici la logique de suppression de l'œuvre avec l'ID work.id
-        // Par exemple :
-        // deleteWork(work.id);
-      });
+
 
 
     });
@@ -54,7 +48,6 @@ function displayWorks(works) {
     console.error("Error displaying works:", error);
   }
 }
-
       
 
 // Fonction pour récupérer les catégories depuis l'API
@@ -104,6 +97,8 @@ function displayCategories(categories) {
   console.log("Catégories affichées avec succès");
 }
 
+
+
 // Fonction pour créer un bouton pour chaque catégorie
 function createCategoryButton(category) {
   const filters = document.querySelector(".filters");
@@ -116,6 +111,7 @@ function createCategoryButton(category) {
     console.log(`Filtrer les œuvres par catégorie: ${category.name}`);
 
     const filteredWorks = allWorks.filter((work) => work.categoryId === category.id);
+    console.log(filteredWorks)
     displayWorks(filteredWorks);
 
     // Mettre à jour l'état actif du bouton
@@ -165,8 +161,10 @@ async function displayWorksInModal() {
       img.alt = work.title;
 
       deleteIcon.classList.add("fa", "fa-trash", "delete-icon");
+      deleteIcon.id = work.id;
       deleteIcon.addEventListener("click", () => {
         console.log("Suppression de l'œuvre:", work.id);
+        // Appeler ici la fonction de delete
         // Implémentez ici la logique de suppression de l'œuvre avec l'ID work.id
       });
 
@@ -307,4 +305,25 @@ function updateStyles() {
   buttons.forEach((button) => {
     button.style.backgroundColor = 'red';
   });
+}
+
+
+async function deleteWorks(id) {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch("http://localhost:5678/api/works/" + id, {
+      method: "DELETE",
+      headers: {
+          "Accept": "application/json",
+          "Authorization": `Bearer ${token}`
+      },
+  });
+  //if (gestion de la réponse si ce n'est pas ok)
+    const elementToDelete = document.getElementById(id)
+    if (elementToDelete) {
+      elementToDelete.parentNode.remove()
+    }
+  } catch {
+    //gestion l'erreur
+  }
 }
