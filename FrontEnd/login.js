@@ -41,6 +41,8 @@ function login() {
     })
      .catch(function (error) {
       console.error("Error:", error);
+      const errorMessage = document.querySelector(".error");
+      errorMessage.style.display = "flex";
     });
 
   }

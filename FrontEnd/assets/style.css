@@ -188,20 +188,87 @@ li:hover {
 }
 
 .custom-modal {
-	width: 630px; 
-	height: 688px; 
-	background-color: #ffffff; 
+
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		border: 1px solid #ccc;
+		padding: 20px;
+		z-index: 1000;
+		max-width: 80%;
+		max-height: 80%;
+		overflow-y: auto;
+	  	width: 630px; 
+		height: 688px; 
+		background-color: #ffffff; 
 }
+.custom-modal h2 {
+	color: #000000;
+	margin-bottom: 20px;
+	margin-top: 40px;
+	text-align: center;
+}
+
+/* CSS for modal images */
+.custom-modal figure {
+	display: inline-block;
+	margin: 5px;
+	width: 100px; /* Adjust width as needed */
+	height: 100px; /* Adjust height as needed */
+	text-align: center;
+  }
+  
+  .custom-modal img {
+	width: 78px; 
+	height: 105px;
+  }
+  
 .close {
-    color: #000000;
+    color: black;
     float: right;
     font-size: 28px;
     font-weight: bold;
-	position: absolute;
-	top: 40px;
-	left: 68%;
-	cursor: pointer;
+    cursor: pointer;
+	position: relative;
+	bottom: 15%;
+	
   }
+  .delete-icon {
+	
+	font-size: 10px; /* Taille de l'icône de poubelle */
+	color: #fff; /* Couleur de l'icône de poubelle */
+	background-color: black; /* Couleur de fond de l'icône de poubelle */
+	border-radius: 10%; /* Pour un aspect de cercle */
+	padding: 5px; /* Espace intérieur de l'icône de poubelle */
+	position: absolute;
+  	top: 10px; /* Ajuster la position verticale de l'icône de poubelle */
+  	right: 10px; /* Ajuster la position horizontale de l'icône de poubelle */
+ 
+
+  cursor: pointer;
+  z-index: 1;
+  }
+
+
+  #addPhoto {
+    background-color: #1D6154;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+	border-radius: 15px;
+	position: absolute;
+	left: 38%;
+	top: 80%;
+	cursor: pointer;
+	border-top: 1px solid black;
+  }
+
+
 
 	
 .filters {
@@ -221,25 +288,40 @@ li:hover {
 	height: 48px;
 }	
 
-button:hover {
-	color: white;
-	background-color: #1D6154;
-}	
+ .category-btn.active {
+	background-color: #1D6154; /* Fond vert */
+	color: white; /* Texte blanc */
+  }
+  
 
-.gallery {
+
+  .gallery {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: repeat(5, 1fr); /* 5 colonnes égales */
+	grid-template-rows: repeat(3, auto); /* 3 rangées automatiques */
+  
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
-}	
-
-.gallery img {
+	
+  }
+  
+  .gallery img {
 	width: 100%;
+	height: 100%; /* Assurez-vous que les images occupent toute la hauteur de leur conteneur */
+	display: block;
+	object-fit: cover; /* Pour que les images respectent les dimensions sans déformation */
+  }
 
-}	
-
-
+  
+  /* Pour la dernière image de la troisième rangée */
+  .gallery figure:last-child {
+	grid-column: 1 / span 1; /* Span sur 3 colonnes à partir de la troisième colonne */
+  }
+  
+.gallery figure {
+	position: relative;
+}
 
 #contact {
 	width: 50%;
@@ -313,10 +395,21 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+.error {
+	display: flex;
+	justify-content: center;
+
+}
+
+.forgotten-pswd {
+	display: none;
+	color: #1D6154;
+}
 
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin-top: 20em;
+	margin-right: 1em;
 }
 
