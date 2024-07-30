@@ -70,8 +70,8 @@ function displayCategories(categories) {
   // Add button "Tous"
   const buttonAll = document.createElement("button");
   buttonAll.classList.add("category-btn");
+  buttonAll.classList.add("active");
   buttonAll.textContent = "Tous";
-  buttonAll.style.backgroundColor = "#1D6154";
   buttonAll.addEventListener("click", () => {
     console.log("Filtrer les œuvres par catégorie: tous");
     displayWorks(allWorks);
@@ -172,7 +172,7 @@ async function displayWorksInModal() {
 
     //  add photo button
     let addPhotoBtn = document.querySelector("#addPhoto");
-    if (!addPhotoBtn) {
+    if (addPhotoBtn) {
       addPhotoBtn = document.createElement("button");
       addPhotoBtn.id = "addPhoto";
       addPhotoBtn.textContent = "Ajouter une photo";
@@ -195,18 +195,18 @@ async function displayWorksInModal() {
 
 // function to show new modal
 function switchToNewModal() {
-  const customModal = document.querySelector('.custom-modal');
+  const modalContent = document.querySelector('.custom-modal');
   const newModal = document.querySelector('.new-modal');
-  customModal.style.display = 'none';
+  modalContent.style.display = 'none';
   newModal.style.display = 'block';
 }
 
 // Function to come back to custom modal
 function switchToCustomModal() {
-  const customModal = document.querySelector('.custom-modal');
+  const modalContent = document.querySelector('.custom-modal');
   const newModal = document.querySelector('.new-modal');
   newModal.style.display = 'none';
-  customModal.style.display = 'block';
+  modalContent.style.display = 'block';
 }
 
 // Function to close modal
@@ -220,11 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   
   const textModifier = document.querySelector('.popup .show-popup');
-  const modal = document.getElementById('modal');
+  const modalContent = document.querySelector('.custom-modal');
   const closeButtons = document.querySelectorAll('.close, .closed'); // Inclure les deux classes de fermeture
   const arrowButton = document.querySelector('.arrow'); // Sélectionner le bouton de flèche de retour
 
-  if (!textModifier || !modal || !closeButtons || !arrowButton) {
+  if (!textModifier || !modalContent || !closeButtons || !arrowButton) {
     console.error('Élément manquant dans le DOM');
     return;
   }
@@ -232,16 +232,16 @@ document.addEventListener('DOMContentLoaded', () => {
   textModifier.addEventListener('click', async () => {
     console.log('Ouverture du modal');
     await displayWorksInModal();
-    modal.style.display = 'flex'; // Afficher le modal
+    modalContent.style.display = 'flex'; // Afficher le modal
   });
 
   // close modal
   closeButtons.forEach(button => button.addEventListener('click', closeModal));
 
   // close modal without click
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      modal.style.display = 'none'; // Cacher le modal si l'utilisateur clique à l'extérieur
+  modalContent.addEventListener('click', (event) => {
+    if (event.target === modalContent) {
+      modalContent.style.display = 'none'; // Cacher le modal si l'utilisateur clique à l'extérieur
       console.log('Fermeture du modal...');
     }
   });
@@ -262,23 +262,59 @@ document.addEventListener('DOMContentLoaded', () => {
     // check if user is logged in
     const token = localStorage.getItem("token");
     console.log("Token from localStorage:", token);
+
     // show admin banner if user est administrateur
     const adminBanner = document.getElementById('adminBanner');
-    console.log("adminBanner element:", adminBanner);
     const header = document.querySelector('header');
     const modifierButton = document.querySelector('.show-popup');
-    console.log('header element:', header);
-
-      if (token) {
+    const logoutButton = document.querySelector('.logout');
+    const loginButton = document.querySelector('.login');
+    
+    //console.log des composants
+    console.log("adminBanner element:", adminBanner);
+    console.log("header element:", header);
+    console.log("modifierButton element:", modifierButton);
+    console.log("logoutButton element:", logoutButton);
+    console.log("loginLink element:", loginLink);
+      
+    
+    if (token) {
+        console.log("Utilisateur connecté");
         header.classList.add('admin-mode');
         adminBanner.style.display = 'block'; // show admin banner
         modifierButton.style.display = 'block'; // show modifierButton
+        logoutButton.style.display = 'block';
+        loginButton.style.display = 'none'; // hide loginButton
     } else {
+        console.log("Utilisateur non connecté");
         header.classList.remove('admin-mode');
         adminBanner.style.display = 'none'; // hide adminBanner
         modifierButton.style.display = 'none'; // hide modifierButton
+        logoutButton.style.display = 'none';
+        loginButton.style.display = 'block'; // show loginButton
     }
-}
+  }
+
+        // logout function
+        function logout() {
+          console.log("Deconnexion");
+
+          // remove token from localStorage
+          localStorage.removeItem('token');
+          console.log("Token supprimé");
+
+          //load conexion page
+          window.location.href = 'login.html';
+          console.log("Redirection vers la page de connexion");
+        } 
+
+
+        // add event listener to logout button
+        
+        document.querySelector('.logout').addEventListener('click', logout);
+        document.addEventListener('DOMContentLoaded', checkUserStatus);
+    
+
 
 
 
@@ -347,3 +383,4 @@ document.addEventListener('DOMContentLoaded', function() {
   arrowButton.addEventListener('click', switchToCustomModal);
 });
 
+//faire le dernier fetch 

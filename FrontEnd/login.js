@@ -26,7 +26,7 @@ function login() {
     .then(function (response) {
       console.log("response from fetch received:", response);
       if (!response.ok) {
-        throw new Error("response not ok: " + response.statusText);
+        throw new Error("Identifiant ou mot de passe incorrect");
       }
       return response.json();
     })
@@ -41,7 +41,9 @@ function login() {
     })
      .catch(function (error) {
       console.error("Error:", error);
+      // Afficher une erreur en cas d'échec
       const errorMessage = document.querySelector(".error");
+      errorMessage.textContent = error.message;
       errorMessage.style.display = "flex";
     });
 
@@ -49,7 +51,7 @@ function login() {
 
  
 
-  document.querySelector("#login form").addEventListener("submit", function (e) {
+  document.querySelector("#loginPage form").addEventListener("submit", function (e) {
       e.preventDefault();
       login();
     });

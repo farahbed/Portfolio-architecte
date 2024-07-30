@@ -22,23 +22,22 @@
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
         <ul>
-          <li>projets</li>
-          <li>contact</li>
-          <li><a href="login.html">login</a></li>
+          <li>Projets</li>
+          <li>Contact</li>
+          <li><a class ="login" href="login.html">Login</a></li>
+          <li><a class ="logout">Logout</a></li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
         </ul>
       </nav>
     </header>
     <!--MODAL-->
-        <div id="modal">
+        <div id="modal" >
 
           <div class="custom-modal">
             <h2>Galerie photo</h2>
             <!-- modal content -->
             <span class="close">x</span>
-            <div id="galleryInModale">
-              <div class="gallery-item"></div>
-            </div>
+            <div id="galleryInModale"></div>
               <button id="addPhoto">Ajouter une photo</button>
           </div>
 
@@ -64,9 +63,10 @@
               <label for="categorySelect">Categorie</label>
               <select id="categorySelect">
                 <option value="">--</option>
-                <option value="Objets">Objets</option>
+                <!--  les faire avec javascript fetch categories comme pour le work in modal
+                 <option value="Objets">Objets</option>
                 <option value="Appartements">Appartements</option>
-                <option value="Hotels&restaurants">Hotels & restaurants</option>
+                <option value="Hotels&restaurants">Hotels & restaurants</option>-->
               </select>
             </form>
            <button id="valider">Valider</button>
