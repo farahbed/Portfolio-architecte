@@ -1,6 +1,7 @@
 const API_BASE_URL = "http://localhost:5678/api";
 let allWorks = [];
 
+    ////////*********************** WORKS **************///////
 // Fetch works
 async function getWorks() {
   try {
@@ -45,8 +46,8 @@ function displayWorks(works) {
     console.error("Error displaying works:", error);
   }
 }
-      ////////*********************** WORKS /////// 
-
+   
+/////////////*************** CATEGORIES //////////////// 
 // Fetch categories
 async function getCategories() {
   try {
@@ -57,6 +58,8 @@ async function getCategories() {
     const data = await response.json();
     console.log("Catégories récupérées avec succès:", data);
     displayCategories(data); 
+    displayCategoriesInModal(data);
+
   } catch (error) {
     console.error("Erreur lors de la récupération des catégories:", error);
   }
@@ -93,8 +96,8 @@ function displayCategories(categories) {
 
   console.log("Catégories affichées avec succès");
 }
-/////////////*************** CATEGORIES //////////////// 
 
+////////////*********** FILTERS BUTTONS **********/////////////
 
 // Function to create a button for each category
 function createCategoryButton(category) {
@@ -123,7 +126,7 @@ function createCategoryButton(category) {
 }
 
 
-////////////*********** FILTERS BUTTONS **********/////////////
+/////////////////// ********CUSTOM MODAL********* //////////////////
 
 // Function to display works in modal
 async function displayWorksInModal() {
@@ -190,8 +193,8 @@ async function displayWorksInModal() {
 }
 
 
+/////////////////// ********NEW MODAL********* //////////////////
 
-/////////////////// ********MODAL********* //////////////////
 
 // function to show new modal
 function switchToNewModal() {
@@ -251,7 +254,134 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-/////////////////// ********NEW MODAL********* //////////////////
+//categories filters and search
+
+async function displayCategoriesInModal(categories) {
+const categorySelect = document.querySelector('#categorySelect');//selecetor du modal(label)
+
+//delete all options already in the select
+categorySelect.innerHTML = '<option value="">--</option>';
+
+  // ajouter une option pour chaque categorie
+  categories.forEach((category) => {
+    const option = document.createElement('option');
+    option.value = category.name;
+    option.textContent = category.name;
+    categorySelect.appendChild(option);
+  });
+  console.log("Catégories affichées dans le modal");
+}
+  //--------------------------fetch dernier post-----------//
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const newModal = document.getElementById("newModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const addPhotoBtn = document.getElementById("addPhotoBtn");
+    const imageUpload = document.getElementById("imageUpload");
+    const addPhotoForm = document.getElementById("addPhotoForm");
+    const validerBtn = document.getElementById("valider");
+    const uploadStatus = document.getElementById("uploadStatusText");
+
+    // Check if all elements are present
+    
+    if (!newModal || !closeModalBtn || !addPhotoBtn || !imageUpload || !addPhotoForm || !validerBtn || !uploadStatusText) {
+      console.error("Un ou plusieurs éléments du DOM ne sont pas trouvés.");
+      return;
+  }
+    
+    // get token from localStorage
+    const token = localStorage.getItem("token");
+    console.log("Token from localStorage:", token);
+
+    if (!token) {
+        console.error("Token non trouvé dans localStorage");
+        return;
+    }
+
+    // Add click event listener to the 'Ajouter une photo' button
+    addPhotoBtn.addEventListener("click", () => {
+        console.log("Bouton 'Ajouter une photo' cliqué");
+        imageUpload.click();
+    });
+// Add click event listener to the 'Fermer' button
+    closeModalBtn.addEventListener("click", () => {
+        console.log("Bouton 'Fermer' cliqué");
+        newModal.style.display = "none";
+    });
+
+    // Add change event listener to the 'imageUpload' input + display upload status
+    imageUpload.addEventListener("change", () => {
+        const file = imageUpload.files[0];
+       
+        if (file) {
+          uploadStatus.textContent = 'Image selected: ' + file.name;
+        } else {
+          uploadStatus.textContent = 'No file chosen';}
+    });
+
+    // Add click event listener to the 'Valider' button
+
+    validerBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        console.log("Bouton 'Valider' cliqué");
+
+        // Send the form data to the server
+
+        const formData = new FormData();
+        const title = document.getElementById("title").value;
+        const categorySelect = document.getElementById("categorySelect").value;
+        const imageFile = imageUpload.files[0];
+
+        if (!imageFile) {
+            console.error("Aucune image sélectionnée");
+            return;
+        }
+
+        console.log("Titre:", title);
+        console.log("Categorie:", categorySelect);
+        console.log("ImageFile:", imageFile);
+
+        formData.append("title", title);
+        formData.append("category", categorySelect);
+        formData.append("image", imageFile);
+
+
+        console.log('FormData contenu:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
+        // fetch data from server
+
+        try {
+            console.log("Envoi de la requête...");
+            const response = await fetch('http://localhost:5678/api/works', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log("Réponse du serveur:", result);
+            
+            if (response.ok) {
+                console.log('Photo ajoutée avec succès:', result);
+                newModal.style.display = "none";
+                addPhotoForm.reset();
+            } else {
+                console.error('Erreur lors de l\'ajout de la photo:', result);
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+    });
+});
+
+ 
+
 //-------------------------------------------------Admin mode
 
 
@@ -275,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("header element:", header);
     console.log("modifierButton element:", modifierButton);
     console.log("logoutButton element:", logoutButton);
-    console.log("loginLink element:", loginLink);
+    console.log("loginLink element:", loginButton);
       
     
     if (token) {
@@ -383,4 +513,5 @@ document.addEventListener('DOMContentLoaded', function() {
   arrowButton.addEventListener('click', switchToCustomModal);
 });
 
-//faire le dernier fetch 
+//faire le dernier fetch values
+// mettre les categories dans le select

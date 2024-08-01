@@ -41,17 +41,20 @@
               <button id="addPhoto">Ajouter une photo</button>
           </div>
 
-          <div class="new-modal">
+          <div class="new-modal" id="newModal">
             <i class="arrow fa-solid fa-arrow-left"></i>
-            <span class="closed">x</span>
+            <span class="closed" id="closeModalBtn">x</span>
             <h2>Ajout photo</h2>
             <form id ="addPhotoForm" action="#" method="post">
               <div id="photoUploadContainer">
                   <div id="addPhotoIcon">
                     <i class="fa-regular fa-image"></i>
                   </div>
-                    <button id="addPhotoBtn">   + Ajouter une photo</button>
+                    <button id="addPhotoBtn" type="button">   + Ajouter une photo</button>
                     <input type="file" id="imageUpload" name="imageUpload" accept="image/*" style="display: none;">
+                
+                      <p id="uploadStatusText">No file chosen</p>
+                  
               </div>
               
                 
@@ -61,12 +64,9 @@
               <input type="text" name="title" id="title">
            
               <label for="categorySelect">Categorie</label>
-              <select id="categorySelect">
+              <select id="categorySelect" name="categorySelect">
                 <option value="">--</option>
-                <!--  les faire avec javascript fetch categories comme pour le work in modal
-                 <option value="Objets">Objets</option>
-                <option value="Appartements">Appartements</option>
-                <option value="Hotels&restaurants">Hotels & restaurants</option>-->
+                <!-- Add categories here -->
               </select>
             </form>
            <button id="valider">Valider</button>
