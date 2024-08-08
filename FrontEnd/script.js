@@ -232,10 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
   // open new modal
-  textModifier.addEventListener('click', async () => {
+  textModifier.addEventListener('click', async () => { // when the modifier is clicked the modal will open
     console.log('Ouverture du modal');
     await displayWorksInModal();
     modalContent.style.display = 'flex'; // Afficher le modal
+    newModal.style.display = 'none'; // Hide the new modal when the custom modal is opened
   });
 
   // close modal
@@ -271,117 +272,115 @@ categorySelect.innerHTML = '<option value="">--</option>';
   });
   console.log("Catégories affichées dans le modal");
 }
-  //--------------------------fetch dernier post-----------//
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const newModal = document.getElementById("newModal");
-    const closeModalBtn = document.getElementById("closeModalBtn");
+
+
+
+  //--------------------------FETCH DERNIER POST-------------------------------------------//
+  // Handle file upload and validate button
+  document.addEventListener('DOMContentLoaded', () => {
     const addPhotoBtn = document.getElementById("addPhotoBtn");
     const imageUpload = document.getElementById("imageUpload");
-    const addPhotoForm = document.getElementById("addPhotoForm");
     const validerBtn = document.getElementById("valider");
-    const uploadStatus = document.getElementById("uploadStatusText");
-
-    // Check if all elements are present
-    
-    if (!newModal || !closeModalBtn || !addPhotoBtn || !imageUpload || !addPhotoForm || !validerBtn || !uploadStatusText) {
-      console.error("Un ou plusieurs éléments du DOM ne sont pas trouvés.");
-      return;
-  }
-    
-    // get token from localStorage
-    const token = localStorage.getItem("token");
-    console.log("Token from localStorage:", token);
-
-    if (!token) {
-        console.error("Token non trouvé dans localStorage");
-        return;
+    const imagePreview = document.getElementById("imagePreview");
+    const addTitle = document.getElementById("title");
+    const categorySelect = document.getElementById("categorySelect");
+  
+    if (addPhotoBtn && imageUpload) {
+      addPhotoBtn.addEventListener("click", () => imageUpload.click());
+      imageUpload.addEventListener("change", handleInputChange);
+    } else {
+      console.error("Bouton ajouter photo ou élément imageUpload non trouvé");
     }
-
-    // Add click event listener to the 'Ajouter une photo' button
-    addPhotoBtn.addEventListener("click", () => {
-        console.log("Bouton 'Ajouter une photo' cliqué");
-        imageUpload.click();
-    });
-// Add click event listener to the 'Fermer' button
-    closeModalBtn.addEventListener("click", () => {
-        console.log("Bouton 'Fermer' cliqué");
-        newModal.style.display = "none";
-    });
-
-    // Add change event listener to the 'imageUpload' input + display upload status
-    imageUpload.addEventListener("change", () => {
-        const file = imageUpload.files[0];
-       
-        if (file) {
-          uploadStatus.textContent = 'Image selected: ' + file.name;
-        } else {
-          uploadStatus.textContent = 'No file chosen';}
-    });
-
-    // Add click event listener to the 'Valider' button
-
-    validerBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        console.log("Bouton 'Valider' cliqué");
-
-        // Send the form data to the server
-
-        const formData = new FormData();
-        const title = document.getElementById("title").value;
-        const categorySelect = document.getElementById("categorySelect").value;
-        const imageFile = imageUpload.files[0];
-
-        if (!imageFile) {
-            console.error("Aucune image sélectionnée");
-            return;
-        }
-
-        console.log("Titre:", title);
-        console.log("Categorie:", categorySelect);
-        console.log("ImageFile:", imageFile);
-
-        formData.append("title", title);
-        formData.append("category", categorySelect);
-        formData.append("image", imageFile);
-
-
-        console.log('FormData contenu:');
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
-        // fetch data from server
-
-        try {
-            console.log("Envoi de la requête...");
-            const response = await fetch('http://localhost:5678/api/works', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                },
-                body: formData
-            });
-
-            const result = await response.json();
-            console.log("Réponse du serveur:", result);
-            
-            if (response.ok) {
-                console.log('Photo ajoutée avec succès:', result);
-                newModal.style.display = "none";
-                addPhotoForm.reset();
-            } else {
-                console.error('Erreur lors de l\'ajout de la photo:', result);
-            }
-        } catch (error) {
-            console.error('Erreur:', error);
-        }
-    });
-});
-
- 
-
+  
+    if (validerBtn) {
+      validerBtn.addEventListener("click", fetchLastPost);
+    } else {
+      console.error("Bouton valider non trouvé");
+    }
+  
+    // Add event listeners to the input fields to check form completion
+    if (addTitle && categorySelect) {
+      addTitle.addEventListener("input", handleInputChange);
+      categorySelect.addEventListener("change", handleInputChange);
+    }
+  
+    function handleInputChange() {
+      const file = imageUpload.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          imagePreview.src = e.target.result;
+          imagePreview.style.display = "block";
+          addPhotoBtn.style.display = "none";
+        };
+        reader.readAsDataURL(file);
+      }
+  
+      checkFormCompletion();
+    }
+  
+    function checkFormCompletion() {
+      const isFormComplete = addTitle.value && categorySelect.value && imageUpload.files.length > 0;
+      validerBtn.style.backgroundColor = isFormComplete ? "#1D6154" : "";
+    }
+  });
+  
+  async function fetchLastPost(event) {
+    event.preventDefault();
+    console.log("fetchLastPost appelé");
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token non trouvé dans localStorage");
+      return;
+    }
+  
+    const imageUpload = document.getElementById("imageUpload").files[0];
+    const addTitle = document.getElementById("title").value;
+    const categorySelect = document.getElementById("categorySelect").value;
+  
+    if (!imageUpload) {
+      console.error("Aucune image sélectionnée");
+      return;
+    }
+  
+    if (!addTitle || !categorySelect) {
+      console.error("Titre ou catégorie non sélectionnés");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("title", addTitle);
+    formData.append("category", categorySelect);
+    formData.append("image", imageUpload);
+  
+    try {
+      const response = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        body: formData
+      });
+  
+      if (!response.ok) {
+        console.error("Erreur dans la requête : ", response.statusText);
+        const errorResponse = await response.text();
+        console.error("Détails de l'erreur :", errorResponse);
+        return;
+      }
+  
+      const data = await response.json();
+      console.log("Réponse reçue", data);
+  
+    } catch (error) {
+      console.error("Une erreur est survenue :", error);
+    }
+  }
+  
+  
+  
 //-------------------------------------------------Admin mode
 
 
@@ -513,5 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
   arrowButton.addEventListener('click', switchToCustomModal);
 });
 
-//faire le dernier fetch values
-// mettre les categories dans le select
+//  le btn valider devien vert quand on a bien rempli les champs et qu'on appuie sur le btn
+
+
