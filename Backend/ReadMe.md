@@ -21,5 +21,5 @@ Lien pour voir la
 Pour lire la documentation, utiliser Chrome ou Firefox
 
 À faire dans le terminal
- 
+ source ~/.bashrc 
 npm start
