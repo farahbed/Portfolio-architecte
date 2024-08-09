@@ -278,140 +278,156 @@ categorySelect.innerHTML = '<option value="">--</option>';
 
   //--------------------------FETCH DERNIER POST-------------------------------------------//
  
- 
-    const addPhotoBtn = document.getElementById("addPhotoBtn");
-    const imageUpload = document.getElementById("imageUpload");
-    const validerBtn = document.getElementById("valider");
-    const imagePreview = document.getElementById("imagePreview");
-    const addTitle = document.getElementById("title");
-    const categorySelect = document.getElementById("categorySelect");
-  
-    // Add event listeners to the buttons
-    if (addPhotoBtn && imageUpload) {
-      console.log("addPhotoBtn and imageUpload found");
-      addPhotoBtn.addEventListener("click", () => {
-        console.log("addPhotoBtn clicked");
-        imageUpload.click();
-      });
-      imageUpload.addEventListener("change", handleInputChange);
-    } else {
-      console.error("Bouton ajouter photo ou élément imageUpload non trouvé");
-    }
-  
-    if (validerBtn) {
-      console.log("validerBtn found");
-      validerBtn.addEventListener("click", fetchLastPost);
-    } else {
-      console.error("Bouton valider non trouvé");
-    }
-  
-    // Add event listeners to the input fields to check form completion
-    if (addTitle && categorySelect) {
-      console.log("addTitle and categorySelect found");
-      addTitle.addEventListener("input", handleInputChange);
-      categorySelect.addEventListener("change", handleInputChange);
-    }
-  
-    // Function to handle input change and display the selected image in the modal preview and check form completion
-    function handleInputChange() {
-      console.log("handleInputChange called");
-      const file = imageUpload.files[0];
-      if (file) {
-        console.log("File selected:", file.name);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          console.log("FileReader onload called");
-          imagePreview.src = e.target.result;
-          imagePreview.style.display = "block";
-          addPhotoBtn.style.display = "none";
-        };
-        reader.readAsDataURL(file);
-      } else {
-        console.log("No file selected");
-      }
-  
-      checkFormCompletion();
-    }
-  
-    // Check form completion if the input fields are filled and the image is selected, the valider button is enabled
-    function checkFormCompletion() {
-      console.log("checkFormCompletion called");
-      const isFormComplete = addTitle.value && categorySelect.value && imageUpload.files.length > 0;
-      console.log("Is form complete?", isFormComplete);
-      validerBtn.style.backgroundColor = isFormComplete ? "#1D6154" : "";
-    }
- 
-  
- 
 
-    async function fetchLastPost(event) {
-      event.preventDefault();
-      console.log("fetchLastPost appelé");
+
   
-      const token = localStorage.getItem("token");
-      if (!token) {
-          console.error("Token non trouvé dans localStorage");
-          return;
-      }
-      console.log("Token trouvé:", token);
+
+ 
+  const addPhotoBtn = document.getElementById("addPhotoBtn");
+  const imageUpload = document.getElementById("imageUpload");
+  const validerBtn = document.getElementById("valider");
+  const imagePreview = document.getElementById("imagePreview");
+  const addTitle = document.getElementById("title");
+  const categorySelect = document.getElementById("categorySelect");
   
-      const imageUpload = document.getElementById("imageUpload").files[0];
-      const addTitle = document.getElementById("title").value;
-      const categorySelect = document.getElementById("categorySelect").value;
-  
-      if (!imageUpload) {
-          console.error("Aucune image sélectionnée");
-          return;
-      }
-  
-      if (!addTitle || !categorySelect) {
-          console.error("Titre ou catégorie non sélectionnés");
-          return;
-      }
-      console.log("Tous les champs sont remplis");
-  
-      // Créer un objet FormData
-      const formData = new FormData();
-      formData.append("title", addTitle);
-      formData.append("categoryId", categorySelect);
-      formData.append("imageUrl", imageUpload);
-  
-      try {
-          console.log("Tentative d'envoi de la requête fetch...");
-  
-          const response = await fetch(`${API_BASE_URL}/works`, {
-              method: "POST",
-              headers: {
-                  "Accept": "application/json",
-                  "Authorization": `Bearer ${token}`
-              },
-              body: formData
-          });
-  
-          console.log("Requête fetch envoyée");
-  
-          if (response.ok) {
-              const data = await response.json();
-              console.log("Post ajouté avec succès. Réponse reçue:", data);
-              window.location.reload();
-          } else {
-              console.error("Erreur dans la requête : ", response.statusText);
-              const errorResponse = await response.text();
-              console.error("Détails de l'erreur :", errorResponse);
-          }
-  
-      } catch (error) {
-          console.error("Une erreur est survenue :", error);
-      }
+  // Add event listeners to the buttons
+  if (addPhotoBtn && imageUpload) {
+    console.log("addPhotoBtn and imageUpload found");
+    addPhotoBtn.addEventListener("click", () => {
+      console.log("addPhotoBtn clicked");
+      imageUpload.click();
+    });
+    imageUpload.addEventListener("change", handleInputChange);
+  } else {
+    console.error("Bouton ajouter photo ou élément imageUpload non trouvé");
   }
   
+  // Add event listeners to the input fields to check form completion
+  if (addTitle && categorySelect) {
+    console.log("addTitle and categorySelect found");
+    addTitle.addEventListener("input", handleInputChange);
+    categorySelect.addEventListener("change", handleInputChange);
+  }
+  
+  // Function to handle input change and display the selected image in the modal preview and check form completion
+  function handleInputChange() {
+    console.log("handleInputChange called");
+    const file = imageUpload.files[0];
+    if (file) {
+      console.log("File selected:", file.name);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log("FileReader onload called");
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = "block";
+        addPhotoBtn.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    } else {
+      console.log("No file selected");
+      imagePreview.style.display = "none";
+      addPhotoBtn.style.display = "block";
+    }
+  
+    checkFormCompletion();
+  }
+  
+  // Check form completion if the input fields are filled and the image is selected, the valider button is enabled
+  function checkFormCompletion() {
+    console.log("checkFormCompletion called");
+    const isFormComplete = addTitle.value.trim() && categorySelect.value && imageUpload.files.length > 0;
+    console.log("Is form complete?", isFormComplete);
+    validerBtn.style.backgroundColor = isFormComplete ? "#1D6154" : "";
+    validerBtn.disabled = !isFormComplete;
+  }
+  
+  // Function to handle form data and submission
+  async function fetchLastPost(event) {
+    event.preventDefault();
+    console.log("fetchLastPost called");
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token non trouvé dans localStorage");
+      return;
+    }
+    console.log("Token trouvé:", token);
+
+ // *****partie du code qui ne fonctionné pas*****
+    const image = imageUpload.files[0];
+    const title = addTitle.value.trim(); // Trim whitespace from title
+    const category = categorySelect.value; // Get category value as string
+  
+    // Debugging logs
+    console.log("Raw category value:", category); // Log raw value from select
+  
+    // Convert category to integer
+    const categoryInt = parseInt(category, 10);
+  
+    // Log the result of the conversion
+    console.log("Converted categoryInt:", categoryInt); // Should be an integer or NaN
+  
+    // Validate title and category
+    if (!title) {
+      console.error("Titre non fourni. Veuillez entrer un titre.");
+      return;
+    }
+  
+    // Category validation
+    if (!category || isNaN(categoryInt) || categoryInt <= 0) {
+      console.error("Catégorie non valide. Veuillez sélectionner une catégorie.");
+      return;
+    }
+  
+    // Prepare form data
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", categoryInt); // Ensure category is an integer
+    formData.append("image", image);
     
+  // *****fin partie du code qui ne fonctionné pas*****
+    try {
+      console.log("Tentative d'envoi de la requête fetch...");
+  
+      const response = await fetch('http://localhost:5678/api/works', {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: formData
+      });
+  
+      console.log("Requête fetch envoyée");
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Post ajouté avec succès. Réponse reçue:", data);
+        window.location.reload();
+      } else {
+        console.error("Erreur dans la requête : ", response.statusText);
+        const errorResponse = await response.text();
+        console.error("Détails de l'erreur :", errorResponse);
+      }
+    } catch (error) {
+      console.error("Une erreur est survenue :", error);
+    }
+  }
+  
+  
+  // Add event listener to the valider button
+  if (validerBtn) {
+    console.log("validerBtn found");
+    validerBtn.addEventListener("click", fetchLastPost);
+  } else {
+    console.error("Bouton valider non trouvé");
+  }
   
   
   
   
-  // deplacer le dom 
-  // faire la reponse l367
+  
+
 //-------------------------------------------------Admin mode
 
 
