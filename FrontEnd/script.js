@@ -445,6 +445,7 @@ categorySelect.innerHTML = '<option value="">--</option>';
     const modifierButton = document.querySelector('.show-popup');
     const logoutButton = document.querySelector('.logout');
     const loginButton = document.querySelector('.login');
+    const filters = document.querySelector('.filters');
     
     //console.log des composants
     console.log("adminBanner element:", adminBanner);
@@ -461,6 +462,7 @@ categorySelect.innerHTML = '<option value="">--</option>';
         modifierButton.style.display = 'block'; // show modifierButton
         logoutButton.style.display = 'block';
         loginButton.style.display = 'none'; // hide loginButton
+        filters.style.display = 'none'; // hide createCategoryButton when logged in
     } else {
         console.log("Utilisateur non connecté");
         header.classList.remove('admin-mode');
@@ -468,6 +470,7 @@ categorySelect.innerHTML = '<option value="">--</option>';
         modifierButton.style.display = 'none'; // hide modifierButton
         logoutButton.style.display = 'none';
         loginButton.style.display = 'block'; // show loginButton
+        filters.style.display = 'flex'; // show createCategoryButton when not logged in
     }
   }
 
